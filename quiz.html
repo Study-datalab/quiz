@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz-Spiel</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>🧠 Quiz-Spiel</h1>
+  <div id="quiz-container">
+    <p id="frage">Frage kommt hier...</p>
+    <div id="antworten">
+      <!-- Antwort-Buttons kommen hier hin -->
+    </div>
+    <p id="fortschritt">Frage 1 von 3</p>
+  </div>
+  <p id="ergebnis" style="display:none;"></p>
+
+  <script>
+    const fragen = [
+      {
+        frage: "Wer pupst viel?",
+        antworten: ["Levi", "Leon", "Larysa", "Olena"],
+        korrekt: 0
+      },
+      {
+        frage: "Wer hat beste Abschluss?",
+        antworten: ["Levi", "Olena", "Larysa", "Jessica"],
+        korrekt: 0
+      },
+      {
+        frage: "Wer spricht mehr Fremdsprachen?",
+        antworten: ["Levi", "Olena", "Larysa", "Jessica"],
+        korrekt: 1
+      },
+      {
+        frage: "Was ist 3 + 4?",
+        antworten: ["5", "6", "7", "8"],
+        korrekt: 2
+      }
+    ];
+
+    let aktuelleFrage = 0;
+    let punkte = 0;
+
+    const frageText = document.getElementById("frage");
+    const antwortContainer = document.getElementById("antworten");
+    const fortschritt = document.getElementById("fortschritt");
+    const ergebnis = document.getElementById("ergebnis");
+
+    function zeigeFrage() {
+      const q = fragen[aktuelleFrage];
+      frageText.textContent = q.frage;
+      antwortContainer.innerHTML = "";
+
+      q.antworten.forEach((antwort, index) => {
+        const button = document.createElement("button");
+        button.textContent = antwort;
+        button.addEventListener("click", () => prüfeAntwort(index));
+        antwortContainer.appendChild(button);
+      });
+
+      fortschritt.textContent = `Frage ${aktuelleFrage + 1} von ${fragen.length}`;
+    }
+
+    function prüfeAntwort(auswahl) {
+      if (auswahl === fragen[aktuelleFrage].korrekt) {
+        punkte++;
+      }
+
+      aktuelleFrage++;
+      if (aktuelleFrage < fragen.length) {
+        zeigeFrage();
+      } else {
+        quizBeenden();
+      }
+    }
+
+    function quizBeenden() {
+      document.getElementById("quiz-container").style.display = "none";
+      ergebnis.style.display = "block";
+      ergebnis.textContent = `🎉 Du hast ${punkte} von ${fragen.length} Punkten erreicht!`;
+    }
+
+    zeigeFrage();
+  </script>
+</body>
+</html>
